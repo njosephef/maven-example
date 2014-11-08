@@ -6,3 +6,7 @@ Note that Zinc (incremental compiler used in the Scala plugin) doesn't yet suppo
 
 Huge thanks to Nikita Volkov, who I've ripped off to throw together this
 project: https://github.com/nikita-volkov/macros-and-maven.
+
+run:
+	mvn scala:run -DmainClass=com.jlab.demo.SimpleApp
+
