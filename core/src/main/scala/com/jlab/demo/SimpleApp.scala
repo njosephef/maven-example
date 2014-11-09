@@ -9,7 +9,7 @@ object SimpleApp {
                 .setMaster("local[2]")
                 .setAppName("Simple Application")
                 .setSparkHome("/home/scorpiovn/apps/spark-1.1.0-bin-hadoop2.4")
-                .setJars(Array("target/core-1.0.0.jar"))
+                //.setJars(Array("target/core-1.0.0.jar"))
     val sc = new SparkContext(conf)
     val logData = sc.textFile(logFile, 2).cache()
     val numAs = logData.filter(line => line.contains("a")).count()

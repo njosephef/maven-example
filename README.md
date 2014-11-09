@@ -8,5 +8,5 @@ Huge thanks to Nikita Volkov, who I've ripped off to throw together this
 project: https://github.com/nikita-volkov/macros-and-maven.
 
 run:
-	mvn scala:run -DmainClass=com.jlab.demo.SimpleApp
+    mvn scala:run -DmainClass=com.jlab.demo.SimpleApp
 
