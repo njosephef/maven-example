@@ -5,11 +5,12 @@ import org.apache.spark.SparkConf
 
 object SimpleApp {
   def main(args: Array[String]) {
-    val logFile = "/home/scorpiovn/apps/README.md" // Should be some file on your system
+    val logFile = System.getenv("HOME") +"/data/prisonbreakfirst/Prison.Break.S01E01.720p.BluRay.x264-HALCYON.srt"
+
     val conf = new SparkConf()
                 .setMaster("local[2]")
                 .setAppName("Simple Application")
-                .setSparkHome("/home/scorpiovn/apps/spark-1.1.0-bin-hadoop2.4")
+                .setSparkHome(System.getenv("SPARK_HOME"))
                 //.setJars(Array("target/core-1.0.0.jar"))
     val sc = new SparkContext(conf)
     val logData = sc.textFile(logFile, 2).cache()
