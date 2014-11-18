@@ -11,22 +11,24 @@ public class SimpleApp2 {
     JavaRDD<String> logData = sc.textFile(logFile).cache();
 
     long numAs = logData.filter(new Function<String, Boolean>() {
-    	/**
-    	 * 
-    	 */
-		private static final long serialVersionUID = 1L;
+      /**
+       *
+       */
+	  private static final long serialVersionUID = 1L;
 
-		public Boolean call(String s) { return s.contains("a"); }
-    	}).count();
+	  public Boolean call(String s) { return s.contains("a"); }
+
+    }).count();
 
     long numBs = logData.filter(new Function<String, Boolean>() {
-    	/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
+      /**
+	   *
+	   */
+	  private static final long serialVersionUID = 1L;
 
-		public Boolean call(String s) { return s.contains("b"); }
-    	}).count();
+	  public Boolean call(String s) { return s.contains("b"); }
+
+    }).count();
 
     System.out.println("Lines with a: " + numAs + ", lines with b: " + numBs);
   }
