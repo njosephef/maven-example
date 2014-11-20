@@ -7,7 +7,7 @@ import org.apache.spark.SparkContext
  */
 object ScalaJob {
   def main (args: Array[String]) {
-    val logFile = System.getenv ("HOME") + "/prisonbreakfirst/Prison.Break.S01E01.720p.BluRay.x264-HALCYON.srt"
+    val logFile = System.getenv ("HOME") + "/data/prisonbreakfirst/Prison.Break.S01E01.720p.BluRay.x264-HALCYON.srt"
     val sc = new SparkContext ("spark://localhost.localdomain:7077"
 				, "Simple Job"
 				, System.getenv ("SPARK_HOME")
