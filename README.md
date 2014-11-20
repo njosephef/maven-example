@@ -5,3 +5,6 @@ An example project
 run:
     mvn scala:run -DmainClass=com.jlab.demo.ScalaJob
 
+CentOS
+- spark://localhost.localdomain:7077
+
