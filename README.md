@@ -7,4 +7,5 @@ run:
 
 CentOS
 - spark://localhost.localdomain:7077
+- ./bin/spark-class org.apache.spark.deploy.worker.Worker spark://localhost.localdomain:7077
 
