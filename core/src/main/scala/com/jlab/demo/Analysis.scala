@@ -13,9 +13,10 @@ class Analysis(context: SparkContext, file: String) extends Serializable {
   }
 
   def process(out: String): Unit = {
-    val regex = """[0-9,.:;',.\/<>?\-\"]""".r
 
     val data = context.textFile(file)
+
+    val regex = """[0-9,.:;',.\/<>?\-\"]""".r
 
     data.flatMap(line => line.split("[\\s]"))
       .map(w => regex.replaceAllIn(w.trim.toLowerCase, ""))
