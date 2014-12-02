@@ -45,6 +45,12 @@
       <version>2.3.5</version>
     </dependency>
 
+    <dependency>
+      <groupId>com.twitter</groupId>
+      <artifactId>chill_2.11</artifactId>
+      <version>0.5.1</version>
+    </dependency>
+
   </dependencies>
 
   <build>
