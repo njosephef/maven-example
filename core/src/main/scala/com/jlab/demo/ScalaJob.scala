@@ -12,7 +12,10 @@ import scala.util.matching.Regex
 object ScalaJob {
   def main (args: Array[String]) {
 
-    val logFile = System.getenv ("HOME") + "/data/prisonbreakfirst/*.srt"
+    val out: String = "/home/scorpiovn/sparkout/out"
+    val input: String = args(0)
+    val file = args(1)
+    val source = System.getenv ("HOME") + input
     val conf = new SparkConf()
       .setMaster("spark://scorpiovn:7077")
       .setAppName("SimpleJob")
@@ -21,14 +24,17 @@ object ScalaJob {
 
     val sc = new SparkContext(conf)
 
-    val analysis = new Analysis(sc, logFile);
+    val analysis = new Analysis(sc, source);
 
-    val out = "/home/scorpiovn/sparkout/out1"
     IOManager.delete(out)
+    IOManager.delete(file)
 
-    analysis.process(out);
+    analysis.process(out, "ed");
+
+    IOManager.merge(out, file)
+
 //    analysis.process()
 
-//    sc.stop()
+    sc.stop()
   }
 }
