@@ -27,10 +27,26 @@ class Analysis(context: SparkContext, file: String) extends Serializable {
       .filter(w => !w.isEmpty)
       .map(w => (w,1))
       .reduceByKey(_+_)
-      .map(item => item.swap)
+//      .map(item => item.swap)
 //      .groupBy(_._1)
-      .sortBy(_._1, false)
-      .values
+      .sortBy(_._2, false)
+      .keys
+      .saveAsTextFile(out);
+  }
+
+  def process(out:String, suffix: String): Unit = {
+    val regex_ = regex
+    val tags = """<(?!\/?a(?=>|\s.*>))\/?.*?>""".r
+
+    context.textFile(file)
+      .repartition(6)
+      .flatMap(line => line.split("[\\s]"))
+      .map(w => tags.replaceAllIn(w.trim.toLowerCase, ""))
+      .map(w => regex_.replaceAllIn(w.trim.toLowerCase, ""))
+      .filter(w => !w.isEmpty && w.endsWith(suffix))
+      .map(w => (w,1))
+      .reduceByKey(_+_)
+      .sortBy(_._2, false)
       .saveAsTextFile(out);
   }
 
