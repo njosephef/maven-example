@@ -1,77 +1,68 @@
 package com.ml.crawler.metasite
 
-import com.ee.core.common.TextAnnotator
-import com.ml.graph.matcher.GraphRegExp._
-import com.ml.crawler.metasite.Facts.Fact
-import com.ee.core.CorpusTransformer
-import collection.mutable.{LinkedHashSet, ArrayBuffer}
-import com.ee.core.matcher.GraphMatchWrapper
-import scala.collection.JavaConversions._
-
 object FactMatchers {
 
-	import com.ml.crawler.pattern.annotation.AnnotationPipeline._
+  def phoneMatcher: Matcher = throw new UnsupportedOperationException
 
-	trait ExecuterContext {
-		//val corpusTransformer = new CorpusTransformer();
-		val annots = new LinkedHashSet[TextAnnotator]
+  def emailMatcher: Matcher = throw new UnsupportedOperationException
 
-		def push(an: TextAnnotator) {
-			if (an == null || annots.contains(an)) return;
-			an match {
-				case pr: Precondition => {
-					push(pr.precondition)
-					annots += an
-					push(pr.postcondition)
+  def addressMatcher: Matcher = throw new UnsupportedOperationException
 
-				}
-				case _ => annots += an
-			}
-		}
+  def companyMatcher: Matcher = throw new UnsupportedOperationException
 
-//		def toAnnotator:TextAnnotator = annots.foldLeft(empty)(_ :: _)
-	}
+  def personMatcher: Matcher = throw new UnsupportedOperationException
 
-	trait Precondition {
-		//		this: Matcher =>
-		def precondition: TextAnnotator;
-		def postcondition:TextAnnotator
+  def dateMatcher: Matcher = throw new UnsupportedOperationException
 
-		val uid: String = null
+  def locationMatcher: Matcher = throw new UnsupportedOperationException
 
-		//		abstract override def equals(obj: AnyRef) =
-		//			if (uid != null) {
-		//				obj match {
-		//					case p: Precondition if p.uid != null => p.uid == uid
-		//					case _ => super.equals(obj)
-		//				}
-		//			} else {
-		//				super.equals(obj)
-		//			}
-	}
+  def Table (columns: Int = -1): Matcher = {
+    ((('tr << ('td % "column").plus.cut) % "row").plus ? {
+      ctx =>
+        ctx.getList ("row").map (_.getList ("column").size).toSet.size == 1
+    }) % "table"
+  }
 
-	def phoneMatcher: Matcher = throw new UnsupportedOperationException
+  trait ExecuterContext {
+    //val corpusTransformer = new CorpusTransformer();
+    val annots = new LinkedHashSet[TextAnnotator]
 
-	def emailMatcher: Matcher = throw new UnsupportedOperationException
+    def push (an: TextAnnotator) {
+      if (an == null || annots.contains (an)) return;
+      an match {
+        case pr: Precondition => {
+          push (pr.precondition)
+          annots += an
+          push (pr.postcondition)
 
-	def addressMatcher: Matcher = throw new UnsupportedOperationException
+        }
+        case _ => annots += an
+      }
+    }
 
-	def companyMatcher: Matcher = throw new UnsupportedOperationException
+    //		def toAnnotator:TextAnnotator = annots.foldLeft(empty)(_ :: _)
+  }
 
-	def personMatcher: Matcher = throw new UnsupportedOperationException
+  //	def cityMatcher():Matcher;
+  //	def cityMatcher():Matcher;
 
-	def dateMatcher: Matcher = throw new UnsupportedOperationException
+  trait Precondition {
+    val uid: String = null
 
-	def locationMatcher: Matcher = throw new UnsupportedOperationException
+    //		this: Matcher =>
+    def precondition: TextAnnotator;
 
-	//	def cityMatcher():Matcher;
-	//	def cityMatcher():Matcher;
+    def postcondition: TextAnnotator
 
-	def Table(columns: Int = -1): Matcher = {
-		((('tr << ('td % "column").plus.cut) % "row").plus ? {
-			ctx =>
-				ctx.getList("row").map (_.getList("column").size).toSet.size == 1
-		}) % "table"
-	}
+    //		abstract override def equals(obj: AnyRef) =
+    //			if (uid != null) {
+    //				obj match {
+    //					case p: Precondition if p.uid != null => p.uid == uid
+    //					case _ => super.equals(obj)
+    //				}
+    //			} else {
+    //				super.equals(obj)
+    //			}
+  }
 
 }
