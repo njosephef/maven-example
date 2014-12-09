@@ -12,6 +12,7 @@
   <modules>
     <module>macros</module>
     <module>core</module>
+	<module>scala-crawler</module>
   </modules>
 
   <dependencies>
@@ -31,10 +32,47 @@
       <artifactId>spark-core_2.10</artifactId>
       <version>1.1.0</version>
     </dependency>
+
     <dependency>
       <groupId>org.apache.hadoop</groupId>
       <artifactId>hadoop-client</artifactId>
       <version>2.4.0</version>
+    </dependency>
+
+    <!-- dependency for Analysis -->
+    <dependency>
+      <groupId>com.typesafe.akka</groupId>
+      <artifactId>akka-actor_2.10</artifactId>
+      <version>2.3.7</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.typesafe.akka</groupId>
+      <artifactId>akka-remote_2.10</artifactId>
+      <version>2.3.7</version>
+    </dependency>
+    <dependency>
+      <groupId>com.typesafe.akka</groupId>
+      <artifactId>akka-slf4j_2.10</artifactId>
+      <version>2.3.7</version>
+    </dependency>
+
+    <!-- merge files -->
+    <dependency>
+      <groupId>org.apache.hadoop</groupId>
+      <artifactId>hadoop-hdfs</artifactId>
+      <version>2.6.0</version>
+    </dependency>
+
+    <!--<dependency>
+      <groupId>com.twitter</groupId>
+      <artifactId>chill_2.11</artifactId>
+      <version>0.5.1</version>
+    </dependency>-->
+    <dependency>
+    <groupId>org.apache.commons</groupId>
+    <artifactId>commons-lang3</artifactId>
+    <version>3.3.2</version>
     </dependency>
   </dependencies>
 
@@ -46,7 +84,7 @@
         <version>3.1.0</version>
         <configuration>
           <recompileMode>incremental</recompileMode>
-          <useZincServer>true</useZincServer>
+          <!--<useZincServer>true</useZincServer>-->
         </configuration>
         <executions>
           <execution>
