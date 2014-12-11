@@ -1,10 +1,7 @@
 package com.jlab.demo
 
 
-import org.apache.spark.SparkContext
-import org.apache.spark.SparkConf
-
-import scala.util.matching.Regex
+import org.apache.spark.{SparkConf, SparkContext}
 
 /**
  * Created by ngvtien on 11/18/2014.
@@ -30,11 +27,9 @@ object ScalaJob {
     IOManager.delete(file)
 
     analysis.process(out, "ed");
+    //    analysis.process()
+    sc.stop()
 
     IOManager.merge(out, file)
-
-//    analysis.process()
-
-    sc.stop()
   }
 }
