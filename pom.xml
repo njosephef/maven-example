@@ -12,6 +12,7 @@
   <modules>
     <module>macros</module>
     <module>core</module>
+    <module>crawler</module>
   </modules>
 
   <dependencies>
