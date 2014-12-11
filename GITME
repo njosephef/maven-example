@@ -16,3 +16,8 @@ git push origin master
 Remove directory from git but NOT local
 git rm -r --cached myFolder
 
+################################################
+Force Git to overwrite all local files
+git fetch --all
+git reset --hard origin/master
+
