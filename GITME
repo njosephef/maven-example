@@ -6,3 +6,13 @@ Untrack Files In Git Repos Without Deleting Them
     # Sync with your git server, pull to sync and push to register your local change
     4) git pull
     5) git push
+################################################
+Remove directory from git and local
+git rm -r one-of-the-directories
+git commit -m "Remove duplicated directory"
+git push origin master
+
+################################################
+Remove directory from git but NOT local
+git rm -r --cached myFolder
+
