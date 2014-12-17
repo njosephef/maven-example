@@ -1,11 +1,14 @@
 package com.gravity.goose
 
-/**
- * Created by Jim Plush
- * User: jim
- * Date: 5/13/11
- */
-object TalkToMeGoose {
+import java.io.File
+
+import com.gravity.goose.utils.Filter
+import org.apache.commons.io.FileUtils
+import org.json4s._
+import org.json4s.jackson.JsonMethods._
+import org.json4s.native.Serialization
+
+object HTMLFilter {
   /**
   * you can use this method if you want to run goose from the command line to extract html from a bashscript
   * or to just test it's functionality
@@ -22,14 +25,33 @@ object TalkToMeGoose {
   *
   * @param args
   */
+
   def main(args: Array[String]) {
     try {
-      val url: String = args(0)
+
+      implicit val formats = Serialization.formats(
+        ShortTypeHints(
+          List(
+            classOf[TextContent],
+            classOf[HTMLContent]
+          )
+        )
+      )
+
+      val fileName: String = args(0)
+      val str = FileUtils readFileToString (new File(fileName), "UTF-8")
+      val json = parse(str)
+      val htmlContent = json.extract[HTMLContent]
+
       val config: Configuration = new Configuration
       config.enableImageFetching = false
-      val goose = new Goose(config)
-      val article = goose.extractContent(url)
+      val filter = new Filter(config)
+      val article = filter.filter(htmlContent.url, htmlContent.html);
       println(article.cleanedArticleText)
+
+      val textContent = new TextContent(htmlContent.url, article.cleanedArticleText)
+
+      FileUtils.write(new File("test.json"), Serialization.writePretty(textContent).toString, "UTF-8")
     }
     catch {
       case e: Exception => {

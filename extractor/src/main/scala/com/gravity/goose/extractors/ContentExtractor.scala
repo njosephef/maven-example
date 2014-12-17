@@ -7,7 +7,7 @@
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -28,15 +28,16 @@ import org.jsoup.nodes.{Attributes, Element, Document}
 import org.jsoup.select._
 
 /**
-* Created by Jim Plush
-* User: jim
-* Date: 8/15/11
-*/
+ * Created by Jim Plush
+ * User: jim
+ * Date: 8/15/11
+ */
 object ContentExtractor extends Logging {
   val logPrefix = "ContentExtractor: "
 }
 
 trait ContentExtractor {
+
   import ContentExtractor._
 
   def getLogger() = logger
@@ -100,12 +101,12 @@ trait ContentExtractor {
   }
 
   /**
-  * based on a delimeter in the title take the longest piece or do some custom logic based on the site
-  *
-  * @param title
-  * @param splitter
-  * @return
-  */
+   * based on a delimeter in the title take the longest piece or do some custom logic based on the site
+   *
+   * @param title
+   * @param splitter
+   * @return
+   */
   def doTitleSplits(title: String, splitter: StringSplitter): String = {
     var largetTextLen: Int = 0
     var largeTextIndex: Int = 0
@@ -134,15 +135,15 @@ trait ContentExtractor {
   }
 
   /**
-  * if the article has meta description set in the source, use that
-  */
+   * if the article has meta description set in the source, use that
+   */
   def getMetaDescription(article: Article): String = {
     getMetaContent(article.doc, "meta[name=description]")
   }
 
   /**
-  * if the article has meta keywords set in the source, use that
-  */
+   * if the article has meta keywords set in the source, use that
+   */
   def getMetaKeywords(article: Article): String = {
     getMetaContent(article.doc, "meta[name=keywords]")
   }
@@ -180,13 +181,13 @@ trait ContentExtractor {
   }
 
   /**
-  * we're going to start looking for where the clusters of paragraphs are. We'll score a cluster based on the number of stopwords
-  * and the number of consecutive paragraphs together, which should form the cluster of text that this node is around
-  * also store on how high up the paragraphs are, comments are usually at the bottom and should get a lower score
-  *
-  * // todo refactor this long method
-  * @return
-  */
+   * we're going to start looking for where the clusters of paragraphs are. We'll score a cluster based on the number of stopwords
+   * and the number of consecutive paragraphs together, which should form the cluster of text that this node is around
+   * also store on how high up the paragraphs are, comments are usually at the bottom and should get a lower score
+   *
+   * // todo refactor this long method
+   * @return
+   */
 
   def calculateBestNodeBasedOnClustering(article: Article): Option[Element] = {
     trace(logPrefix + "Starting to calculate TopNode")
@@ -281,14 +282,14 @@ trait ContentExtractor {
   }
 
   /**
-  * alot of times the first paragraph might be the caption under an image so we'll want to make sure if we're going to
-  * boost a parent node that it should be connected to other paragraphs, at least for the first n paragraphs
-  * so we'll want to make sure that the next sibling is a paragraph and has at least some substatial weight to it
-  *
-  *
-  * @param node
-  * @return
-  */
+   * alot of times the first paragraph might be the caption under an image so we'll want to make sure if we're going to
+   * boost a parent node that it should be connected to other paragraphs, at least for the first n paragraphs
+   * so we'll want to make sure that the next sibling is a paragraph and has at least some substatial weight to it
+   *
+   *
+   * @param node
+   * @return
+   */
   private def isOkToBoost(node: Element): Boolean = {
     val para = "p"
     var stepsAway: Int = 0
@@ -320,12 +321,12 @@ trait ContentExtractor {
   }
 
   /**
-  * checks the density of links within a node, is there not much text and most of it contains linky shit?
-  * if so it's no good
-  *
-  * @param e
-  * @return
-  */
+   * checks the density of links within a node, is there not much text and most of it contains linky shit?
+   * if so it's no good
+   *
+   * @param e
+   * @return
+   */
   private def isHighLinkDensity(e: Element): Boolean = {
     val links: Elements = e.getElementsByTag("a")
     if (links.size == 0) {
@@ -354,11 +355,11 @@ trait ContentExtractor {
   }
 
   /**
-  * returns the gravityScore as an integer from this node
-  *
-  * @param node
-  * @return
-  */
+   * returns the gravityScore as an integer from this node
+   *
+   * @param node
+   * @return
+   */
   private def getScore(node: Element): Int = {
     getGravityScoreFromNode(node) match {
       case Some(score) => score
@@ -377,12 +378,12 @@ trait ContentExtractor {
   }
 
   /**
-  * adds a score to the gravityScore Attribute we put on divs
-  * we'll get the current score then add the score we're passing in to the current
-  *
-  * @param node
-  * @param addToScore - the score to add to the node
-  */
+   * adds a score to the gravityScore Attribute we put on divs
+   * we'll get the current score then add the score we're passing in to the current
+   *
+   * @param node
+   * @param addToScore - the score to add to the node
+   */
   private def updateScore(node: Element, addToScore: Int) {
     var currentScore: Int = 0
     try {
@@ -399,11 +400,11 @@ trait ContentExtractor {
   }
 
   /**
-  * stores how many decent nodes are under a parent node
-  *
-  * @param node
-  * @param addToCount
-  */
+   * stores how many decent nodes are under a parent node
+   *
+   * @param node
+   * @param addToCount
+   */
   private def updateNodeCount(node: Element, addToCount: Int) {
     var currentScore: Int = 0
     try {
@@ -420,10 +421,10 @@ trait ContentExtractor {
   }
 
   /**
-  * pulls out videos we like
-  *
-  * @return
-  */
+   * pulls out videos we like
+   *
+   * @return
+   */
   def extractVideos(node: Element): List[Element] = {
     val candidates: ArrayList[Element] = new ArrayList[Element]
     val goodMovies = mutable.Buffer[Element]()
@@ -483,11 +484,11 @@ trait ContentExtractor {
 
 
   /**
-  * remove any divs that looks like non-content, clusters of links, or paras with no gusto
-  *
-  * @param targetNode
-  * @return
-  */
+   * remove any divs that looks like non-content, clusters of links, or paras with no gusto
+   *
+   * @param targetNode
+   * @return
+   */
   def postExtractionCleanup(targetNode: Element): Element = {
 
     trace(logPrefix + "Starting cleanup Node")
@@ -526,11 +527,11 @@ trait ContentExtractor {
   }
 
   /**
-  * adds any siblings that may have a decent score to this node
-  *
-  * @param currentSibling
-  * @return
-  */
+   * adds any siblings that may have a decent score to this node
+   *
+   * @param currentSibling
+   * @return
+   */
   def getSiblingContent(currentSibling: Element, baselineScoreForSiblingParagraphs: Int): Option[String] = {
 
     if (currentSibling.tagName == "p" && currentSibling.text.length() > 0) {
@@ -591,14 +592,14 @@ trait ContentExtractor {
   }
 
   /**
-  * we could have long articles that have tons of paragraphs so if we tried to calculate the base score against
-  * the total text score of those paragraphs it would be unfair. So we need to normalize the score based on the average scoring
-  * of the paragraphs within the top node. For example if our total score of 10 paragraphs was 1000 but each had an average value of
-  * 100 then 100 should be our base.
-  *
-  * @param topNode
-  * @return
-  */
+   * we could have long articles that have tons of paragraphs so if we tried to calculate the base score against
+   * the total text score of those paragraphs it would be unfair. So we need to normalize the score based on the average scoring
+   * of the paragraphs within the top node. For example if our total score of 10 paragraphs was 1000 but each had an average value of
+   * 100 then 100 should be our base.
+   *
+   * @param topNode
+   * @return
+   */
   private def getBaselineScoreForSiblings(topNode: Element): Int = {
     var base: Int = 100000
     var numberOfParagraphs: Int = 0

@@ -1,7 +1,7 @@
 package com.gravity.goose.images
 
-import org.apache.http.client.HttpClient
 import com.gravity.goose.{Configuration, Article}
+import org.apache.http.client.HttpClient
 import org.jsoup.nodes.{Element, Document}
 import java.util.regex.{Pattern, Matcher}
 import com.gravity.goose.text.string
@@ -9,17 +9,19 @@ import java.net.{MalformedURLException, URL}
 import org.jsoup.select.Elements
 import scala.collection.JavaConversions._
 import java.util.ArrayList
-import collection.mutable.{ListBuffer, HashMap}
-import com.gravity.goose.utils.FileHelper
-import io.Source
+import collection.mutable.{ListBuffer}
+//import com.gravity.goose.utils.FileHelper
+//import io.Source
+
+import scala.io.Source
 
 /**
 * Created by Jim Plush
 * User: jim
 * Date: 9/22/11
 */
-
 class UpgradedImageIExtractor(httpClient: HttpClient, article: Article, config: Configuration) extends ImageExtractor {
+
 
   import UpgradedImageIExtractor._
 

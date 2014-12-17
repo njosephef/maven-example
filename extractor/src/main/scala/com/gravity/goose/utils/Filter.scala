@@ -16,16 +16,20 @@
  * limitations under the License.
  */
 
-package com.gravity.goose
+package com.gravity.goose.utils
 
-import cleaners.{StandardDocumentCleaner, DocumentCleaner}
-import extractors.ContentExtractor
-import images.{Image, UpgradedImageIExtractor, ImageExtractor}
+import com.gravity.goose.cleaners.{DocumentCleaner, StandardDocumentCleaner}
+import com.gravity.goose.extractors.ContentExtractor
+import com.gravity.goose.images.{UpgradedImageIExtractor, ImageExtractor, Image}
+import com.gravity.goose.{Article, Configuration}
 import org.apache.http.client.HttpClient
+
+//import org.apache.http.client.HttpClient
+
+//import org.apache.http.client.HttpClient
 import org.jsoup.nodes.{Document, Element}
 import org.jsoup.Jsoup
 import java.io.File
-import utils.{ParsingCandidate, URLHelper, Logging}
 import com.gravity.goose.outputformatters.{StandardOutputFormatter, OutputFormatter}
 
 /**
@@ -33,30 +37,25 @@ import com.gravity.goose.outputformatters.{StandardOutputFormatter, OutputFormat
  * User: jim
  * Date: 8/18/11
  */
+class Filter(config: Configuration) {
 
-case class CrawlCandidate(config: Configuration, url: String, rawHTML: String = null)
+  import Filter._
 
-class Crawler(config: Configuration) {
-
-  import Crawler._
-
-  def crawl(crawlCandidate: CrawlCandidate): Article = {
+  def filter(url: String, rawHTML: String): Article = {
     val article = new Article()
     for {
-      parseCandidate <- URLHelper.getCleanedUrl(crawlCandidate.url)
-      rawHtml <- getHTML(crawlCandidate, parseCandidate)
-      doc <- getDocument(parseCandidate.url.toString, rawHtml)
+//      parseCandidate <- URLHelper.getCleanedUrl(filterCandidate.url)
+//      rawHtml <- getHTML(filterCandidate, parseCandidate)
+      doc <- getDocument(url, rawHTML)
     } {
-      trace("Crawling url: " + parseCandidate.url)
+      trace("Crawling url: " + url)
 
       val extractor = getExtractor
       val docCleaner = getDocCleaner
       val outputFormatter = getOutputFormatter
 
-      article.finalUrl = parseCandidate.url.toString
-      article.domain = parseCandidate.url.getHost
-      article.linkhash = parseCandidate.linkhash
-      article.rawHtml = rawHtml
+      article.finalUrl = url
+      article.rawHtml = rawHTML
       article.doc = doc
       article.rawDoc = doc.clone()
 
@@ -67,10 +66,8 @@ class Crawler(config: Configuration) {
       article.metaKeywords = extractor.getMetaKeywords(article)
       article.canonicalLink = extractor.getCanonicalLink(article)
       article.tags = extractor.extractTags(article)
-      // before we do any calcs on the body itself let's clean up the document
+
       article.doc = docCleaner.clean(article)
-
-
 
       extractor.calculateBestNodeBasedOnClustering(article) match {
         case Some(node: Element) => {
@@ -94,9 +91,6 @@ class Crawler(config: Configuration) {
           }
           article.topNode = extractor.postExtractionCleanup(article.topNode)
 
-
-
-
           article.cleanedArticleText = outputFormatter.getFormattedText(article.topNode)
         }
         case _ => trace("NO ARTICLE FOUND")
@@ -108,7 +102,7 @@ class Crawler(config: Configuration) {
     article
   }
 
-  def getHTML(crawlCandidate: CrawlCandidate, parsingCandidate: ParsingCandidate): Option[String] = {
+  /*def getHTML(crawlCandidate: FilterCandidate, parsingCandidate: ParsingCandidate): Option[String] = {
     if (crawlCandidate.rawHTML != null) {
       Some(crawlCandidate.rawHTML)
     } else {
@@ -119,7 +113,7 @@ class Crawler(config: Configuration) {
         case _ => None
       }
     }
-  }
+  }*/
 
 
   def getImageExtractor(article: Article): ImageExtractor = {
@@ -172,6 +166,6 @@ class Crawler(config: Configuration) {
 
 }
 
-object Crawler extends Logging {
+object Filter extends Logging {
   val logPrefix = "crawler: "
 }
